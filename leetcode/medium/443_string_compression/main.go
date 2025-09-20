@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 )
 
 func compress(chars []byte) int {
@@ -19,13 +20,8 @@ func compress(chars []byte) int {
 		}
 		canCompare = true
 		if count > 1 {
-			num := make([]byte, 0, 1)
-			for count > 0 {
-				char := count % 10
-				count = count / 10
-				num = append(num, byte(char+48))
-			}
-			for j := len(num) - 1; j >= 0; j-- {
+			num := strconv.Itoa(count)
+			for j := range len(num) {
 				chars[iter] = num[j]
 				iter++
 			}
