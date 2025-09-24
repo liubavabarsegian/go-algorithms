@@ -3,14 +3,11 @@ package main
 import "fmt"
 
 func largestAltitude(gain []int) int {
-	res := make([]int, len(gain)+1)
-
-	res[0] = 0
 	largestAltitude := 0
+	prefixSum := 0
 	for i := 0; i < len(gain); i++ {
-		res[i+1] = res[i] + gain[i]
-
-		largestAltitude = max(largestAltitude, res[i+1])
+		prefixSum += gain[i]
+		largestAltitude = max(largestAltitude, prefixSum)
 	}
 
 	return largestAltitude
