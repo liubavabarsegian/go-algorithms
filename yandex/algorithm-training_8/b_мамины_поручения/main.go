@@ -2,40 +2,22 @@ package main
 
 import (
 	"fmt"
-	"strconv"
 )
 
-func countVasyasHappiness(n int, mushrooms []int) int {
-	sum := 0
-	var minVasya, maxMasha int
-	if n >= 1 {
-		minVasya = mushrooms[0]
-	}
-	if n >= 2 {
-		maxMasha = mushrooms[1]
-	}
+func bestPath(a, b, c, v0, v1, v2 float64) float64 {
+	minSum := a/v0 + c/v1 + b/v2
+	minSum = min(minSum, b/v0+c/v1+a/v2)
+	minSum = min(minSum, a/v0+a/v1+b/v0+b/v1)
+	minSum = min(minSum, a/v0+c/v0+b/v1+a/v0+a/v1)
+	minSum = min(minSum, b/v0+c/v0+a/v1+b/v0+b/v1)
+	minSum = min(minSum, b/v0+c/v1+c/v2+b/v2)
+	minSum = min(minSum, a/v0+c/v1+c/v2+a/v2)
 
-	for i := 0; i < n; i++ {
-		if i%2 == 0 {
-			minVasya = min(mushrooms[i], minVasya)
-			sum += mushrooms[i]
-		} else {
-			maxMasha = max(mushrooms[i], maxMasha)
-			sum -= mushrooms[i]
-		}
-
-	}
-
-	if maxMasha > minVasya {
-		sum = sum + 2*maxMasha - 2*minVasya
-	}
-	return sum
+	return minSum
 }
 
 func main() {
-
-	fmt.Scanf("%d %d %d %d %d'n")
-
-	writer.WriteString(strconv.Itoa(countVasyasHappiness(n, mushrooms)))
-	writer.WriteByte('\n')
+	var a, b, c, v0, v1, v2 float64
+	fmt.Scanf("%f %f %f %f %f %f\n", &a, &b, &c, &v0, &v1, &v2)
+	fmt.Println(bestPath(a, b, c, v0, v1, v2))
 }
