@@ -5,13 +5,13 @@ import (
 )
 
 func bestPath(a, b, c, v0, v1, v2 float64) float64 {
-	minSum := a/v0 + c/v1 + b/v2
-	minSum = min(minSum, b/v0+c/v1+a/v2)
-	minSum = min(minSum, a/v0+a/v1+b/v0+b/v1)
-	minSum = min(minSum, a/v0+c/v0+b/v1+a/v0+a/v1)
-	minSum = min(minSum, b/v0+c/v0+a/v1+b/v0+b/v1)
-	minSum = min(minSum, b/v0+c/v1+c/v2+b/v2)
-	minSum = min(minSum, a/v0+c/v1+c/v2+a/v2)
+	min_home_supermarket := min(a, b+c)
+	min_home_pvz := min(b, a+c)
+	min_supermarket_pvz := min(c, a+b)
+
+	minSum := min_home_supermarket/v0 + min_supermarket_pvz/v1 + min_home_pvz/v2
+	minSum = min(minSum, min_home_pvz/v0+min_supermarket_pvz/v1+min_home_supermarket/v2)
+	minSum = min(minSum, min_home_supermarket/v0+min_home_supermarket/v1+min_home_pvz/v0+min_home_pvz/v1)
 
 	return minSum
 }
