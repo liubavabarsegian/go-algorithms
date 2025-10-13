@@ -8,35 +8,61 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
-func paths(root *TreeNode, currentpath []int, targetSum int) [][]int {
+func DFSsubarraySum(root *TreeNode, prefixSum int, frequenciesMap map[int]int, targetSum int) int {
 	if root == nil {
-		return [][]int{}
+		return 0
 	}
+	result := 0
 
-	currentpath = append(currentpath, root.Val)
-
-	res := [][]int{}
-
-	if root.Left == nil && root.Right == nil && targetSum == root.Val {
-		return append(res, append([]int(nil), currentpath...))
+	prefixSum += root.Val
+	// we update the result only when prefixSum - k exists in the map
+	if _, ok := frequenciesMap[prefixSum-targetSum]; ok {
+		result += frequenciesMap[prefixSum-targetSum]
 	}
+	if prefixSum == targetSum {
+		result++
+	}
+	frequenciesMap[prefixSum]++
 
-	res = append(res, paths(root.Left, append([]int(nil), currentpath...), targetSum-root.Val)...)
-	res = append(res, paths(root.Right, append([]int(nil), currentpath...), targetSum-root.Val)...)
+	left := DFSsubarraySum(root.Left, prefixSum, frequenciesMap, targetSum)
+	right := DFSsubarraySum(root.Right, prefixSum, frequenciesMap, targetSum)
 
-	return res
+	// backtracking. это эффективнее копирования
+	// просто удаляем нижний элемент из мапы после обработки или уменьшаем счетчик
+	frequenciesMap[prefixSum]--
+
+	return result + left + right
 }
 
-func pathSum(root *TreeNode, targetSum int) [][]int {
-
+func pathSum(root *TreeNode, targetSum int) int {
 	if root == nil {
-		return [][]int{}
+		return 0
 	}
+	frequenciesMap := make(map[int]int)
+	prefixSum := 0
 
-	return paths(root, []int{}, targetSum)
+	return DFSsubarraySum(root, prefixSum, frequenciesMap, targetSum)
 }
 
 func main() {
+	fmt.Println(pathSum(
+		&TreeNode{Val: 10,
+			Left: &TreeNode{Val: 5,
+				Left: &TreeNode{Val: 3,
+					Left:  &TreeNode{Val: 3},
+					Right: &TreeNode{Val: -2},
+				},
+				Right: &TreeNode{Val: 2,
+					Right: &TreeNode{Val: 1},
+				},
+			},
+			Right: &TreeNode{Val: -3,
+				Right: &TreeNode{Val: 11,
+					Right: &TreeNode{Val: -3}},
+			},
+		}, 8))
+
+	//[5,4,8,11,null,13,4,7,2,null,null,5,1]
 	fmt.Println(pathSum(
 		&TreeNode{Val: 5,
 			Left: &TreeNode{Val: 4,
@@ -49,8 +75,7 @@ func main() {
 				Left: &TreeNode{Val: 13},
 				Right: &TreeNode{Val: 4,
 					Left:  &TreeNode{Val: 5},
-					Right: &TreeNode{Val: 1},
-				},
+					Right: &TreeNode{Val: 1}},
 			},
 		}, 22))
 }
