@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 
+// TODO
 func searchMatrix(matrix [][]int, target int) bool {
 	// поиск по первому элементу строк
 	// если больше [i][0], но меньше [i+1][0], то можно рассматривать строку
